@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -55,6 +56,12 @@ public class PlayerScript : MonoBehaviour
             {
                 transform.eulerAngles = new Vector3(0f, newRotationY, 0f);
             }
+        }
+    }
+
+    private void  OnCollisionEnter2D(Collision2D other) {
+        if(other.gameObject.tag == "Enemy"){
+            SceneManager.LoadScene("BattleScene");
         }
     }
 }

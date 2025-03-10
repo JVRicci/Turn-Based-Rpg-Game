@@ -967,8 +967,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
-  playerTransform: {fileID: 579108294}
-  enemyTransform: {fileID: 139926014}
+  playerObject: {fileID: 579108294}
+  enemyObject: {fileID: 139926014}
   moveSpeed: 25
   attackWaitTime: 0.5
   BattleInput: {fileID: 839246649}
