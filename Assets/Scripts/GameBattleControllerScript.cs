@@ -11,8 +11,8 @@ public class GameBattleControllerScript : MonoBehaviour
 {
 
     public BattleState state;
-    public Transform playerTransform;  // O transform do jogador
-    public Transform enemyTransform;   // O transform do inimigo
+    public Transform playerObject;  // O transform do jogador
+    public Transform enemyObject;   // O transform do inimigo
     private Vector2 playerStartPosition;     // Guarda a posição inicial do jogador
     private Vector2 enemyStartPosition;     // Guarda a posição inicial do inimigo
     public float moveSpeed = 25f;       // Velocidade do movimento
@@ -23,8 +23,9 @@ public class GameBattleControllerScript : MonoBehaviour
     {
         state = BattleState.START;
         StartCoroutine(SetupBattle()); 
-        playerStartPosition = playerTransform.position; // Guarda a posição inicial do player
-        enemyStartPosition = enemyTransform.position; // Guarda a posição inicial do player
+        playerStartPosition = playerObject.position; // Guarda a posição inicial do player
+        enemyStartPosition = enemyObject
+.position; // Guarda a posição inicial do player
     }
 
     IEnumerator SetupBattle()
@@ -56,13 +57,13 @@ public class GameBattleControllerScript : MonoBehaviour
         BattleInput.text += "\nO jogador atacou!";
 
          // Move o jogador até o inimigo
-        yield return StartCoroutine(MoveToPosition(playerTransform, enemyTransform.position));
+        yield return StartCoroutine(MoveToPosition(playerObject, enemyObject.position));
 
         // Simula o ataque (adiciona um delay antes de voltar)
         yield return new WaitForSeconds(attackWaitTime);
 
         // Move o jogador de volta para a posição original
-        yield return StartCoroutine(MoveToPosition(playerTransform, playerStartPosition));
+        yield return StartCoroutine(MoveToPosition(playerObject, playerStartPosition));
     
         yield return new WaitForSeconds(1f);
 
@@ -83,11 +84,11 @@ public class GameBattleControllerScript : MonoBehaviour
     {
         BattleInput.text += "\nO inimigo atacou!";
 
-        yield return StartCoroutine(MoveToPosition(enemyTransform, playerTransform.position));
+        yield return StartCoroutine(MoveToPosition(enemyObject, playerObject.position));
 
         yield return new WaitForSeconds(attackWaitTime);
 
-        yield return StartCoroutine(MoveToPosition(enemyTransform, enemyStartPosition));
+        yield return StartCoroutine(MoveToPosition(enemyObject, enemyStartPosition));
         // Espera um frame para garantir que a interface seja atualizada antes de continuar
         yield return new WaitForSeconds(1f);
         
