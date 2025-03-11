@@ -11,18 +11,21 @@ public class GameBattleControllerScript : MonoBehaviour
     public Transform playerObject;  // O transform do jogador
     public Transform enemyObject;   // O transform do inimigo
     private Vector2 playerStartPosition;     // Guarda a posição inicial do jogador
-    private Vector2 enemyStartPosition;     // Guarda a posição inicial do inimigo
+    public Vector2 enemyStartPosition;     // Guarda a posição inicial do inimigo
     public float moveSpeed = 25f;       // Velocidade do movimento
     public float attackWaitTime = 0.5f; // Tempo de espera antes de voltar
 
     public TMP_Text BattleInput; // Recebe pela interface da unity o input text da tela
+
+    public static GameBattleControllerScript instance;
     void Start()
     {
+        instance = this;
         state = BattleState.START;
         StartCoroutine(SetupBattle()); 
         playerStartPosition = playerObject.position; // Guarda a posição inicial do player
-        enemyStartPosition = enemyObject
-.position; // Guarda a posição inicial do player
+        
+        enemyStartPosition = enemyObject.position; // Guarda a posição inicial do player
     }
 
     IEnumerator SetupBattle()
@@ -38,42 +41,11 @@ public class GameBattleControllerScript : MonoBehaviour
         state = BattleState.PLAYER_TURN;
         
         BattleInput.text = "Escolha uma ação";
-        // Espera um frame para garantir que a interface seja atualizada antes de rolar
     }
 
-    public void OnAttackButton()
+
+    public void EnemyTurn()
     {
-        if (state != BattleState.PLAYER_TURN)
-            return;
-
-        StartCoroutine(PlayerAttack());
-    }
-
-    IEnumerator PlayerAttack()
-    {
-        // Aplica dano ao inimigo
-        BattleInput.text += "\nO jogador atacou!";
-
-         // Move o jogador até o inimigo
-        //  O vector2 eu utilizei para que o player não chhegasse totalmente até o inimigo
-        yield return StartCoroutine(MoveToPosition(playerObject, new Vector2(enemyObject.position.x - 2, enemyObject.position.y)));
-
-        // Simula o ataque (adiciona um delay antes de voltar)
-        yield return new WaitForSeconds(attackWaitTime);
-
-        // Move o jogador de volta para a posição original
-        yield return StartCoroutine(MoveToPosition(playerObject, playerStartPosition));
-    
-        yield return new WaitForSeconds(1f);
-
-        // Verifica se o inimigo foi derrotado
-        EnemyTurn();
-    }
-
-    void EnemyTurn()
-    {
-        
-        playerOptions.SetActive(false);
         state = BattleState.ENEMY_TURN;
         
         BattleInput.text += "\nTurno do inimigo";
@@ -83,7 +55,9 @@ public class GameBattleControllerScript : MonoBehaviour
 
     IEnumerator EnemyAttack()
     {
+        yield return new WaitForSeconds(attackWaitTime + .5f);
         BattleInput.text += "\nO inimigo atacou!";
+        // Simula o ataque (adiciona um delay antes de voltar)
 
         yield return StartCoroutine(MoveToPosition(enemyObject, new Vector2(playerObject.position.x + 2, playerObject.position.y)));
 

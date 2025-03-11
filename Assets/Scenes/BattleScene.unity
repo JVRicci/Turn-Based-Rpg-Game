@@ -536,6 +536,7 @@ GameObject:
   - component: {fileID: 579108293}
   - component: {fileID: 579108292}
   - component: {fileID: 579108295}
+  - component: {fileID: 579108296}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -658,6 +659,23 @@ CapsuleCollider:
   m_Height: 1.5333333
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &579108296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 579108291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae8177296f75d05439131bfc1a9ebba3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BattleController: {fileID: 973766982}
+  moveSpeed: 25
+  attackWaitTime: 0.5
+  playerObject: {fileID: 579108294}
+  enemyObject: {fileID: 139926014}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -946,7 +964,7 @@ Canvas:
   m_GameObject: {fileID: 947369499}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -1319,8 +1337,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 973766985}
-        m_TargetAssemblyTypeName: GameBattleControllerScript, Assembly-CSharp
+      - m_Target: {fileID: 579108296}
+        m_TargetAssemblyTypeName: PlayerBattleScript, Assembly-CSharp
         m_MethodName: OnAttackButton
         m_Mode: 1
         m_Arguments:
