@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class CameraScript : MonoBehaviour
 {
-
     public Transform player;
     // Necessário ajustar manualmente a posição da camera no inspector
     public Vector3 offset;

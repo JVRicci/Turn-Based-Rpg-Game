@@ -4,13 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public enum BattleState { START, PLAYER_TURN, ENEMY_TURN, WIN, LOSE }
-public interface BattleText{
-    void Text();
-}
 public class GameBattleControllerScript : MonoBehaviour 
 {
-
     public BattleState state;
+    public GameObject playerOptions;
     public Transform playerObject;  // O transform do jogador
     public Transform enemyObject;   // O transform do inimigo
     private Vector2 playerStartPosition;     // Guarda a posição inicial do jogador
@@ -37,6 +34,7 @@ public class GameBattleControllerScript : MonoBehaviour
 
     void PlayerTurn()
     {
+        playerOptions.SetActive(true);
         state = BattleState.PLAYER_TURN;
         
         BattleInput.text = "Escolha uma ação";
@@ -57,7 +55,8 @@ public class GameBattleControllerScript : MonoBehaviour
         BattleInput.text += "\nO jogador atacou!";
 
          // Move o jogador até o inimigo
-        yield return StartCoroutine(MoveToPosition(playerObject, enemyObject.position));
+        //  O vector2 eu utilizei para que o player não chhegasse totalmente até o inimigo
+        yield return StartCoroutine(MoveToPosition(playerObject, new Vector2(enemyObject.position.x - 2, enemyObject.position.y)));
 
         // Simula o ataque (adiciona um delay antes de voltar)
         yield return new WaitForSeconds(attackWaitTime);
@@ -73,6 +72,8 @@ public class GameBattleControllerScript : MonoBehaviour
 
     void EnemyTurn()
     {
+        
+        playerOptions.SetActive(false);
         state = BattleState.ENEMY_TURN;
         
         BattleInput.text += "\nTurno do inimigo";
@@ -84,7 +85,7 @@ public class GameBattleControllerScript : MonoBehaviour
     {
         BattleInput.text += "\nO inimigo atacou!";
 
-        yield return StartCoroutine(MoveToPosition(enemyObject, playerObject.position));
+        yield return StartCoroutine(MoveToPosition(enemyObject, new Vector2(playerObject.position.x + 2, playerObject.position.y)));
 
         yield return new WaitForSeconds(attackWaitTime);
 
@@ -100,7 +101,9 @@ public class GameBattleControllerScript : MonoBehaviour
         while ((Vector2)obj.position != target)
         {
             obj.position = Vector2.MoveTowards(obj.position, target, moveSpeed * Time.deltaTime);
+
             yield return null; // Espera o próximo frame
+
         }
     }
 
