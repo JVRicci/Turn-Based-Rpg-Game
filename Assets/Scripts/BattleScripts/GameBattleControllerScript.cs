@@ -8,6 +8,7 @@ public class GameBattleControllerScript : MonoBehaviour
 {
     public BattleState state;
     public GameObject playerOptions;
+    public GameObject enemyOptions;
     public Transform playerObject;  // O transform do jogador
     public Transform enemyObject;   // O transform do inimigo
     private Vector2 playerStartPosition;     // Guarda a posição inicial do jogador
@@ -18,9 +19,14 @@ public class GameBattleControllerScript : MonoBehaviour
     public TMP_Text BattleInput; // Recebe pela interface da unity o input text da tela
 
     public static GameBattleControllerScript instance;
-    void Start()
+
+    void Awake()
     {
         instance = this;
+    }
+
+    void Start()
+    {
         state = BattleState.START;
         StartCoroutine(SetupBattle()); 
         playerStartPosition = playerObject.position; // Guarda a posição inicial do player
@@ -35,7 +41,7 @@ public class GameBattleControllerScript : MonoBehaviour
         PlayerTurn();
     }
 
-    void PlayerTurn()
+    public void PlayerTurn()
     {
         playerOptions.SetActive(true);
         state = BattleState.PLAYER_TURN;
@@ -50,36 +56,6 @@ public class GameBattleControllerScript : MonoBehaviour
         
         BattleInput.text += "\nTurno do inimigo";
 
-        StartCoroutine(EnemyAttack());
+        StartCoroutine(enemyObject.GetComponent<EnemyBattleScript>().EnemyAttack());
     }
-
-    IEnumerator EnemyAttack()
-    {
-        yield return new WaitForSeconds(attackWaitTime + .5f);
-        BattleInput.text += "\nO inimigo atacou!";
-        // Simula o ataque (adiciona um delay antes de voltar)
-
-        yield return StartCoroutine(MoveToPosition(enemyObject, new Vector2(playerObject.position.x + 2, playerObject.position.y)));
-
-        yield return new WaitForSeconds(attackWaitTime);
-
-        yield return StartCoroutine(MoveToPosition(enemyObject, enemyStartPosition));
-        // Espera um frame para garantir que a interface seja atualizada antes de continuar
-        yield return new WaitForSeconds(1f);
-        
-        PlayerTurn();
-    }
-
-    IEnumerator MoveToPosition(Transform obj, Vector2 target)
-    {
-        while ((Vector2)obj.position != target)
-        {
-            obj.position = Vector2.MoveTowards(obj.position, target, moveSpeed * Time.deltaTime);
-
-            yield return null; // Espera o próximo frame
-
-        }
-    }
-
-    
 }
